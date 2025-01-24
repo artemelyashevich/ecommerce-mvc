@@ -13,7 +13,7 @@
         </h2>
         <p class="mt-2 text-center text-sm text-gray-600 max-w">
             Or
-            <a th:href="@{/app/auth/login}" class="font-medium text-blue-600 hover:text-blue-500">
+            <a th:href="@{/auth/login}" class="font-medium text-blue-600 hover:text-blue-500">
                 Login here
             </a>
 
@@ -28,7 +28,7 @@
                         Username
                     </label>
                     <div class="mt-1">
-                        <input id="username" name="username" type="text" required
+                        <input th:value="${user?.username}" id="username" name="username" type="text" required
                                class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                placeholder="Enter your username">
                     </div>
@@ -39,7 +39,7 @@
                         Full name
                     </label>
                     <div class="mt-1">
-                        <input id="fullname" name="fullName" type="text" required
+                        <input th:value="${user?.fullName}" id="fullname" name="fullName" type="text" required
                                class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                placeholder="Enter your fullname">
                     </div>
@@ -50,7 +50,7 @@
                         Address
                     </label>
                     <div class="mt-1">
-                        <input id="address" name="address" type="text" required
+                        <input th:value="${user?.address}" id="address" name="address" type="text" required
                                class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                placeholder="Enter your address">
                     </div>
@@ -61,18 +61,18 @@
                         Email address
                     </label>
                     <div class="mt-1">
-                        <input id="email" name="email" type="email" autocomplete="email" required
+                        <input th:value="${user?.email}" id="email" name="email" type="email" autocomplete="email" required
                                class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                placeholder="Enter your email address">
                     </div>
                 </div>
 
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">
+                    <label   for="password" class="block text-sm font-medium text-gray-700">
                         Password
                     </label>
                     <div class="mt-1">
-                        <input id="password" name="password" type="password" autocomplete="current-password" required
+                        <input th:value="${user?.password}" id="password" name="password" type="password" autocomplete="current-password" required
                                class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                placeholder="Enter your password">
                     </div>

@@ -16,6 +16,6 @@ public class DispatcherRequestConfig implements WebApplicationInitializer {
         var servlet = new DispatcherServlet(context);
         var registration = servletContext.addServlet("app", servlet);
         registration.setLoadOnStartup(1);
-        registration.addMapping("/app/*");
+        registration.addMapping("/");
     }
 }

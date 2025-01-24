@@ -1,15 +1,6 @@
 package com.elyashevich.ecommerce.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -55,16 +46,10 @@ public class User extends AbstractEntity {
     private String image;
 
     @Builder.Default
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
+    @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
     public void addRole(Role role) {
         this.roles.add(role);
-        role.getUsers().add(this);
     }
 }

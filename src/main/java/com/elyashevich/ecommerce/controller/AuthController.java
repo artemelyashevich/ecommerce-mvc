@@ -1,6 +1,10 @@
 package com.elyashevich.ecommerce.controller;
 
-import com.elyashevich.ecommerce.dto.AuthDto;
+import com.elyashevich.ecommerce.dto.auth.LoginDto;
+import com.elyashevich.ecommerce.dto.auth.RegisterDto;
+import com.elyashevich.ecommerce.mapper.LoginMapper;
+import com.elyashevich.ecommerce.mapper.RegisterMapper;
+import com.elyashevich.ecommerce.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final AuthService authService;
+    private final RegisterMapper registerMapper;
+    private final LoginMapper loginMapper;
+
     @GetMapping("/login")
     public String login(){
         return "auth/login";
@@ -24,7 +32,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("user") AuthDto authDto) {
+    public String register(@ModelAttribute("user") RegisterDto authDto) {
+        this.authService.register(this.registerMapper.toEntity(authDto));
+        return "redirect:/home";
+    }
+
+    @PostMapping("/login")
+    public String login(@ModelAttribute("user") LoginDto authDto) {
+        this.authService.login(this.loginMapper.toEntity(authDto));
         return "redirect:/home";
     }
 }
