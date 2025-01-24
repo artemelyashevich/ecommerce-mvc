@@ -1,6 +1,6 @@
-package com.elyashevich.ecommerce.entity
+package com.elyashevich.ecommerce.entity;
 
-import jakarta.persistence.MappedSuperclass
+import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class AbstractEntity {
