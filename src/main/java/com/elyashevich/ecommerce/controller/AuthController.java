@@ -5,6 +5,7 @@ import com.elyashevich.ecommerce.dto.auth.RegisterDto;
 import com.elyashevich.ecommerce.mapper.LoginMapper;
 import com.elyashevich.ecommerce.mapper.RegisterMapper;
 import com.elyashevich.ecommerce.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,13 +33,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("user") RegisterDto authDto) {
+    public String register(@Valid @ModelAttribute("user") RegisterDto authDto) {
         this.authService.register(this.registerMapper.toEntity(authDto));
         return "redirect:/home";
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute("user") LoginDto authDto) {
+    public String login(@Valid @ModelAttribute("user") LoginDto authDto) {
         this.authService.login(this.loginMapper.toEntity(authDto));
         return "redirect:/home";
     }
