@@ -1,6 +1,5 @@
 package com.elyashevich.ecommerce.dto;
 
-import com.elyashevich.ecommerce.entity.Category;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.hibernate.validator.constraints.Length;
