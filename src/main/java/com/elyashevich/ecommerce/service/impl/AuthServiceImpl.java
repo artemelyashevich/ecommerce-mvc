@@ -21,13 +21,13 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void register(User candidate) {
+    public void register(final User candidate) {
         var user = this.userService.create(candidate);
 
     }
 
     @Override
-    public void login(User candidate) {
+    public void login(final User candidate) {
         var user = this.userService.findByEmail(candidate.getEmail());
         if (!this.passwordEncoder.matches(candidate.getPassword(), user.getPassword())) {
             throw new PasswordMismatchException("Password mismatch");

@@ -24,7 +24,7 @@ public class MvcConfig implements WebMvcConfigurer {
     public SpringResourceTemplateResolver templateResolver() {
         var templateResolver = new SpringResourceTemplateResolver();
         templateResolver.setApplicationContext(this.applicationContext);
-        templateResolver.setPrefix("/WEB-INF/templates/pages/");
+        templateResolver.setPrefix("/WEB-INF/templates/");
         templateResolver.setSuffix(".html");
         templateResolver.setCacheable(false);
         return templateResolver;
@@ -39,7 +39,7 @@ public class MvcConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
+    public void configureViewResolvers(final ViewResolverRegistry registry) {
         var resolver = new ThymeleafViewResolver();
         resolver.setTemplateEngine(this.templateEngine());
         registry.viewResolver(resolver);

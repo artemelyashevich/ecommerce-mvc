@@ -4,7 +4,7 @@ import com.elyashevich.ecommerce.entity.User;
 
 public interface AuthService {
 
-    void register(User user);
+    void register(final User user);
 
-    void login(User user);
+    void login(final User user);
 }

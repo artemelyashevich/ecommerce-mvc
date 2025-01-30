@@ -9,7 +9,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 public class DispatcherRequestConfig implements WebApplicationInitializer {
 
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
+    public void onStartup(final ServletContext servletContext) throws ServletException {
         var context = new AnnotationConfigWebApplicationContext();
         context.register(MvcConfig.class);
 

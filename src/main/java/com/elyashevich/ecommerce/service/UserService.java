@@ -4,9 +4,9 @@ import com.elyashevich.ecommerce.entity.User;
 
 public interface UserService {
 
-    User findByEmail(String email);
+    User findByEmail(final String email);
 
-    User findByUsername(String username);
+    User findByUsername(final String username);
 
-    User create(User user);
+    User create(final User user);
 }

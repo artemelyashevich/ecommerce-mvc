@@ -24,7 +24,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product findById(Long id) {
+    public Product findById(final Long id) {
         return this.productRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Product with id '%s' not found".formatted(id))
         );
@@ -32,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public Product create(Product product) {
+    public Product create(final Product product) {
         var category = this.categoryService.findByName(product.getCategory().getName());
         product.setCategory(category);
         return this.productRepository.save(product);
@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public Product update(Long id, Product product) {
+    public Product update(final Long id, final Product product) {
         var oldProduct = this.findById(id);
         convert(oldProduct, product);
         return this.productRepository.save(oldProduct);
@@ -48,12 +48,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public void delete(Long id) {
+    public void delete(final Long id) {
         var product = this.findById(id);
         this.productRepository.delete(product);
     }
 
-    private static void convert(Product oldProduct, Product newProduct) {
+    private static void convert(final Product oldProduct, final Product newProduct) {
         oldProduct.setName(newProduct.getName());
         oldProduct.setPrice(newProduct.getPrice());
         oldProduct.setDescription(newProduct.getDescription());
