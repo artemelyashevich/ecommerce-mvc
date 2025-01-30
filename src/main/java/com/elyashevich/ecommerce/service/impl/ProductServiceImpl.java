@@ -3,6 +3,7 @@ package com.elyashevich.ecommerce.service.impl;
 import com.elyashevich.ecommerce.entity.Product;
 import com.elyashevich.ecommerce.exception.ResourceNotFoundException;
 import com.elyashevich.ecommerce.repository.ProductRepository;
+import com.elyashevich.ecommerce.service.CategoryService;
 import com.elyashevich.ecommerce.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
 
     @Override
     public List<Product> findAll() {
@@ -28,8 +30,11 @@ public class ProductServiceImpl implements ProductService {
         );
     }
 
+    @Transactional
     @Override
     public Product create(Product product) {
+        var category = this.categoryService.findByName(product.getCategory().getName());
+        product.setCategory(category);
         return this.productRepository.save(product);
     }
 

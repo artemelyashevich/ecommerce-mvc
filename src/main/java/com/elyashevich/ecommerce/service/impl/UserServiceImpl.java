@@ -21,13 +21,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByEmail(String email) {
         return this.userRepository.findByEmail(email).orElseThrow(
-                ()-> new ResourceNotFoundException("User with email %s was npt found".formatted(email))
+                ()-> new ResourceNotFoundException("User with email %s was not found".formatted(email))
+        );
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return this.userRepository.findByUsername(username).orElseThrow(
+                ()-> new ResourceNotFoundException("User with username %s was not found".formatted(username))
         );
     }
 
     @Override
     public User create(User user) {
-        user.setRoles(Set.of(Role.ROLE_USER));
+        user.addRole(Role.ROLE_USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return this.userRepository.save(user);
     }
