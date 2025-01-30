@@ -33,14 +33,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("user") RegisterDto authDto) {
+    public String register(final @Valid @ModelAttribute("user") RegisterDto authDto) {
         this.authService.register(this.registerMapper.toEntity(authDto));
         return "redirect:/home";
     }
 
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute("user") LoginDto authDto) {
+    public String login(final @Valid @ModelAttribute("user") LoginDto authDto) {
         this.authService.login(this.loginMapper.toEntity(authDto));
-        return "redirect:/home";
+        return "redirect:/products";
     }
 }

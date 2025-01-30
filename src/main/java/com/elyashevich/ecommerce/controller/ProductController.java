@@ -26,14 +26,14 @@ public class ProductController {
     private final ProductMapper productMapper;
 
     @GetMapping
-    public String products(Model model) {
+    public String products(final Model model) {
         var products = this.productService.findAll();
         model.addAttribute("products", this.productMapper.toDto(products));
         return "product/products";
     }
 
     @GetMapping("/{id}")
-    public String product(@PathVariable Long id, Model model) {
+    public String product(final @PathVariable Long id, final Model model) {
         var product = this.productService.findById(id);
         model.addAttribute("product", this.productMapper.toDto(product));
         return "product/product";

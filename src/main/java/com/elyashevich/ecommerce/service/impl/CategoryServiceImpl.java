@@ -22,19 +22,19 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category findByName(String name) {
+    public Category findByName(final String name) {
         return this.categoryRepository.findByName(name).orElseThrow(
                 () -> new ResourceNotFoundException("Category with name '%s' not found".formatted(name))
         );
     }
 
     @Override
-    public Category create(Category category) {
+    public Category create(final Category category) {
         return this.categoryRepository.save(category);
     }
 
     @Override
-    public Category findById(Long id) {
+    public Category findById(final Long id) {
         return this.categoryRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Category with id '%s' not found".formatted(id))
         );
@@ -42,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public Category update(Long id, Category category) {
+    public Category update(final Long id, final Category category) {
         var oldCategory = this.findById(id);
         convert(oldCategory, category);
         return this.categoryRepository.save(oldCategory);
@@ -50,12 +50,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public void delete(Long id) {
+    public void delete(final Long id) {
         var category = this.findById(id);
         this.categoryRepository.delete(category);
     }
 
-    private static void convert(Category oldCategory, Category newCategory) {
+    private static void convert(final Category oldCategory, final Category newCategory) {
         oldCategory.setName(newCategory.getName());
     }
 }

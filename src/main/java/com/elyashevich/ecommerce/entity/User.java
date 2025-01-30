@@ -27,7 +27,7 @@ import java.util.*;
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends AbstractEntity implements UserDetails {
+public class User extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,36 +51,13 @@ public class User extends AbstractEntity implements UserDetails {
     @Column(name = "image")
     private String image;
 
-    @Builder.Default
     @Column
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     public void addRole(Role role) {
+        if (roles == null) {
+            roles = new HashSet<>();
+        }
         this.roles.add(role);
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }

@@ -27,21 +27,28 @@ public class AdminController {
     private final CategoryMapper categoryMapper;
 
     @GetMapping("/categories")
-    public String createCategory(Model model) {
+    public String createCategory(final Model model) {
         var categories = this.categoryService.findAll();
         model.addAttribute("categories", this.categoryMapper.toDto(categories));
         return "admin/categories";
     }
 
     @GetMapping("/products/create")
-    public String createProduct(Model model) {
+    public String createProduct(final Model model) {
         var categories = this.categoryService.findAll();
         model.addAttribute("categories", this.categoryMapper.toDto(categories));
         return "admin/create-product";
     }
 
+    @GetMapping("/categories/edit/{id}")
+    public String editProduct(final Model model, @PathVariable final Long id) {
+        var category = this.categoryService.findById(id);
+        model.addAttribute("category", this.categoryMapper.toDto(category));
+        return "admin/edit-category";
+    }
+
     @GetMapping("/products/edit/{id}")
-    public String editProduct(@PathVariable("id") Long id, Model model) {
+    public String editProduct(final @PathVariable("id") Long id, final Model model) {
         var product = this.productService.findById(id);
         var categories = this.categoryService.findAll().stream()
                 .filter(category -> !product.getCategory().getId().equals(category.getId()))
@@ -52,35 +59,45 @@ public class AdminController {
     }
 
     @PostMapping("/categories/create")
-    public String createCategoryAction(@Valid @ModelAttribute("categoryDto") CategoryDto categoryDto) {
+    public String createCategoryAction(final @Valid @ModelAttribute("categoryDto") CategoryDto categoryDto) {
         var category = this.categoryMapper.toEntity(categoryDto);
         this.categoryService.create(category);
         return "redirect:/admin/categories";
     }
 
     @PostMapping("/products/create")
-    public String createProductAction(@Valid @ModelAttribute("productDto") ProductDto productDto) {
+    public String createProductAction(final @Valid @ModelAttribute("productDto") ProductDto productDto) {
         var product  = this.productService.create(productMapper.toEntity(productDto));
         return "redirect:/products/%d".formatted(product.getId());
     }
 
+    @PostMapping("/categories/{id}")
+    public String editCategoryAction(
+            final @PathVariable("id") Long id,
+            final @Valid @ModelAttribute("categoryDto") CategoryDto categoryDto
+    ) {
+        var category = this.categoryMapper.toEntity(categoryDto);
+        this.categoryService.update(id, category);
+        return "redirect:/admin/categories";
+    }
+
     @PostMapping("/products/edit/{id}")
     public String editProductAction(
-            @PathVariable("id") Long id,
-            @Valid @ModelAttribute("productDto") ProductDto productDto
+            final @PathVariable("id") Long id,
+            final @Valid @ModelAttribute("productDto") ProductDto productDto
     ) {
         this.productService.update(id, this.productMapper.toEntity(productDto));
         return "redirect:/products/%d".formatted(id);
     }
 
     @PostMapping("/products/delete/{id}")
-    public String deleteProduct(@PathVariable("id") Long id) {
+    public String deleteProduct(final @PathVariable("id") Long id) {
         this.productService.delete(id);
         return "redirect:/products";
     }
 
     @PostMapping("/categories/delete/{id}")
-    public String deleteCategory(@PathVariable("id") Long id) {
+    public String deleteCategory(final @PathVariable("id") Long id) {
         this.categoryService.delete(id);
         return "redirect:/categories";
     }

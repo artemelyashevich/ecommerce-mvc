@@ -1,5 +1,6 @@
 package com.elyashevich.ecommerce.config;
 
+import com.elyashevich.ecommerce.entity.Role;
 import com.elyashevich.ecommerce.service.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,22 +17,23 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @ComponentScan(basePackages = "com.elyashevich.ecommerce")
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
 
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/*").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.loginPage("/auth/login").permitAll())
+                .formLogin(form -> form
+                        .loginPage("/auth/login").permitAll()
+                        .successForwardUrl("/products")
+                )
                 .logout(LogoutConfigurer::permitAll);
         return http.build();
     }
@@ -41,7 +43,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(this.userDetailsService).passwordEncoder(this.passwordEncoder());
     }
 }
