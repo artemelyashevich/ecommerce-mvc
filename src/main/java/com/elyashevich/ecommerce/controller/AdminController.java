@@ -40,6 +40,13 @@ public class AdminController {
         return "admin/create-product";
     }
 
+    @GetMapping("/categories/edit/{id}")
+    public String editProduct(final Model model, @PathVariable final Long id) {
+        var category = this.categoryService.findById(id);
+        model.addAttribute("category", this.categoryMapper.toDto(category));
+        return "admin/edit-category";
+    }
+
     @GetMapping("/products/edit/{id}")
     public String editProduct(final @PathVariable("id") Long id, final Model model) {
         var product = this.productService.findById(id);
@@ -62,6 +69,16 @@ public class AdminController {
     public String createProductAction(final @Valid @ModelAttribute("productDto") ProductDto productDto) {
         var product  = this.productService.create(productMapper.toEntity(productDto));
         return "redirect:/products/%d".formatted(product.getId());
+    }
+
+    @PostMapping("/categories/{id}")
+    public String editCategoryAction(
+            final @PathVariable("id") Long id,
+            final @Valid @ModelAttribute("categoryDto") CategoryDto categoryDto
+    ) {
+        var category = this.categoryMapper.toEntity(categoryDto);
+        this.categoryService.update(id, category);
+        return "redirect:/admin/categories";
     }
 
     @PostMapping("/products/edit/{id}")

@@ -22,8 +22,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void register(final User candidate) {
-        var user = this.userService.create(candidate);
-
+        this.userService.create(candidate);
     }
 
     @Override

@@ -41,6 +41,6 @@ public class AuthController {
     @PostMapping("/login")
     public String login(final @Valid @ModelAttribute("user") LoginDto authDto) {
         this.authService.login(this.loginMapper.toEntity(authDto));
-        return "redirect:/home";
+        return "redirect:/products";
     }
 }

@@ -1,4 +1,6 @@
-<header th:fragment="eader"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<header th:fragment="header"
         class='flex shadow py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50'
         xmlns:sec="http://www.w3.org/1999/xhtml">
     <div class='flex flex-wrap items-center justify-between gap-4 w-full'>
@@ -16,7 +18,7 @@
                 </svg>
             </button>
 
-            <ul sec:authorize="hasRole('ROLE_ADMIN')"
+            <ul sec:authorize="hasRole('ADMIN')"
                 class='lg:flex lg:gap-x-5 max-lg:space-y-3 max-lg:fixed max-lg:bg-white max-lg:w-1/2 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-6 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50'>
                 <li class='max-lg:border-b max-lg:py-3 px-3'>
                     <a href="${pageContext.request.contextPath}/products"
@@ -89,3 +91,4 @@
         toggleClose.addEventListener('click', handleClick);
     </script>
 </header>
+</html>
