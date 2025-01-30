@@ -21,16 +21,16 @@
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <form class="space-y-6" action="#" method="POST">
+            <form class="space-y-6" th:action="@{/auth/login}" method="POST">
 
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700">
-                        Email address
+                        Username
                     </label>
                     <div class="mt-1">
-                        <input id="email" name="email" type="email" autocomplete="email" required
+                        <input id="email" name="username" type="text" autocomplete="email" required
                                class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                               placeholder="Enter your email address">
+                               placeholder="Enter your username">
                     </div>
                 </div>
 

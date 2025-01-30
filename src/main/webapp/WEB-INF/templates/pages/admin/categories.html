@@ -45,9 +45,7 @@
                         2022-05-15
                     </td>
                     <td class="p-2 flex items-center gap-2">
-                        <form action="${pageContext.request.contextPath}/categories" class="my-10" method="post">
-                            <input type="hidden" name="command" value="delete_category">
-                            <input type="hidden" name="id" value=${category.getId()}>
+                    <form th:action="@{'/admin/categories/delete/{categoryId}(categoryId=${category.id()})'}" class="my-10" method="post">
                             <button class="mr-4" title="Delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 fill-red-500 hover:fill-red-700"
                                      viewBox="0 0 24 24">

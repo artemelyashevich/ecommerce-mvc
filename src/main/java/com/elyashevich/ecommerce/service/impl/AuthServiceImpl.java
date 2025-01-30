@@ -21,8 +21,9 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void register(User user) {
-        this.userService.create(user);
+    public void register(User candidate) {
+        var user = this.userService.create(candidate);
+
     }
 
     @Override
