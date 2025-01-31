@@ -26,7 +26,7 @@
                     Id
                 </th>
                 <th class="p-4 text-left text-sm font-medium text-white">
-                    Name
+                   Name
                 </th>
                 <th class="p-4 text-left text-sm font-medium text-white">
                     Created At
@@ -41,13 +41,16 @@
                 <tr class="even:bg-blue-50">
                     <td th:text="${category.id()}" class="p-2 text-sm text-black">
                     </td>
-                    <td class="p-2 text-sm text-black" th:text="${category.name()}">
+                    <td class="p-2 text-sm text-black">
+                        <a  th:text="${category.name()}" th:href="@{/admin/categories/edit/{categoryId}(categoryId=${category.id()})}">
+                            Name
+                        </a>
                     </td>
                     <td class="p-2 text-sm text-black">
                         2022-05-15
                     </td>
                     <td class="p-2 flex items-center gap-2">
-                    <form th:action="@{'/admin/categories/delete/{categoryId}(categoryId=${category.id()})'}" class="my-10" method="post">
+                    <form th:action="@{/admin/categories/delete/{categoryId}(categoryId=${category.id()})}" class="my-10" method="post">
                             <button class="mr-4" title="Delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 fill-red-500 hover:fill-red-700"
                                      viewBox="0 0 24 24">

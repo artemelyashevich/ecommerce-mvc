@@ -41,7 +41,7 @@ public class AdminController {
     }
 
     @GetMapping("/categories/edit/{id}")
-    public String editProduct(final Model model, @PathVariable final Long id) {
+    public String editProduct(final Model model, @PathVariable("id") final Long id) {
         var category = this.categoryService.findById(id);
         model.addAttribute("category", this.categoryMapper.toDto(category));
         return "admin/edit-category";
@@ -71,7 +71,7 @@ public class AdminController {
         return "redirect:/products/%d".formatted(product.getId());
     }
 
-    @PostMapping("/categories/{id}")
+    @PostMapping("/categories/edit/{id}")
     public String editCategoryAction(
             final @PathVariable("id") Long id,
             final @Valid @ModelAttribute("categoryDto") CategoryDto categoryDto
@@ -99,6 +99,6 @@ public class AdminController {
     @PostMapping("/categories/delete/{id}")
     public String deleteCategory(final @PathVariable("id") Long id) {
         this.categoryService.delete(id);
-        return "redirect:/categories";
+        return "redirect:/admin/categories";
     }
 }

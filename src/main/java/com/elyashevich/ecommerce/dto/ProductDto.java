@@ -8,7 +8,7 @@ public record ProductDto(
 
         @NotNull(message = "Name must be not empty")
         @Length(
-                min = 8,
+                min = 2,
                 max = 50,
                 message = "Name must be in {min} and {max}"
         )
@@ -16,7 +16,7 @@ public record ProductDto(
 
         @NotNull(message = "Description must be not empty")
         @Length(
-                min = 8,
+                min = 5,
                 max = 255,
                 message = "Description must be in {min} and {max}"
         )

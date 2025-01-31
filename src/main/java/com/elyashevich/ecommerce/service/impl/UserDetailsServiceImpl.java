@@ -26,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 user.getUsername(),
                 user.getPassword(),
                 user.getRoles().stream()
-                        .map(Role::getAuthority)
+                        .map(Role::name)
                         .map(SimpleGrantedAuthority::new)
                         .toList()
         );
