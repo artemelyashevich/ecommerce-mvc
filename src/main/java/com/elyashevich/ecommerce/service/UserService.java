@@ -47,5 +47,11 @@ public interface UserService {
      */
     void delete(final Long id);
 
+    /**
+     * Finds a user by their id.
+     *
+     * @param id the username of the user to find
+     * @return the found user, or null if not found
+     */
     User findById(final Long id);
 }
