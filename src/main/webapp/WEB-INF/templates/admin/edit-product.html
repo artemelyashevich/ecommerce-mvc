@@ -43,6 +43,12 @@
                 class="px-6 py-2.5 w-full !mt-8 text-sm bg-[#007bff] hover:bg-blue-600 text-white rounded active:bg-[#006bff]">
             Save
         </button>
+        <div th:if="${errors}">
+            <h2>Errors</h2>
+            <ul>
+                <li th:each="error: ${errors}" th:text="${error}"></li>
+            </ul>
+        </div>
     </form>
 </div>
 </body>

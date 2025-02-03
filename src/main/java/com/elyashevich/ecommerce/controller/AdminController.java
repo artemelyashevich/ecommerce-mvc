@@ -8,10 +8,12 @@ import com.elyashevich.ecommerce.mapper.UserMapper;
 import com.elyashevich.ecommerce.service.CategoryService;
 import com.elyashevich.ecommerce.service.ProductService;
 import com.elyashevich.ecommerce.service.UserService;
+import com.elyashevich.ecommerce.util.ValidationHandlerUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,14 +85,30 @@ public class AdminController {
     }
 
     @PostMapping("/categories/create")
-    public String createCategoryAction(final @Valid @ModelAttribute("categoryDto") CategoryDto categoryDto) {
+    public String createCategoryAction(
+            final @Valid @ModelAttribute("categoryDto") CategoryDto categoryDto,
+            final BindingResult bindingResult,
+            final Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            ValidationHandlerUtil.handleValidation(model, bindingResult);
+            return "redirect:/admin/categories";
+        }
         var category = this.categoryMapper.toEntity(categoryDto);
         this.categoryService.create(category);
         return "redirect:/admin/categories";
     }
 
     @PostMapping("/products/create")
-    public String createProductAction(final @Valid @ModelAttribute("productDto") ProductDto productDto) {
+    public String createProductAction(
+            final @Valid @ModelAttribute("productDto") ProductDto productDto,
+            final BindingResult bindingResult,
+            final Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            ValidationHandlerUtil.handleValidation(model, bindingResult);
+            return "redirect:/products";
+        }
         var product = this.productService.create(productMapper.toEntity(productDto));
         return "redirect:/products/%d".formatted(product.getId());
     }
@@ -98,8 +116,14 @@ public class AdminController {
     @PostMapping("/categories/edit/{id}")
     public String editCategoryAction(
             final @PathVariable("id") Long id,
-            final @Valid @ModelAttribute("categoryDto") CategoryDto categoryDto
+            final @Valid @ModelAttribute("categoryDto") CategoryDto categoryDto,
+            final BindingResult bindingResult,
+            final Model model
     ) {
+        if (bindingResult.hasErrors()) {
+            ValidationHandlerUtil.handleValidation(model, bindingResult);
+            return "redirect:/admin/categories";
+        }
         var category = this.categoryMapper.toEntity(categoryDto);
         this.categoryService.update(id, category);
         return "redirect:/admin/categories";
@@ -108,8 +132,14 @@ public class AdminController {
     @PostMapping("/products/edit/{id}")
     public String editProductAction(
             final @PathVariable("id") Long id,
-            final @Valid @ModelAttribute("productDto") ProductDto productDto
+            final @Valid @ModelAttribute("productDto") ProductDto productDto,
+            final BindingResult bindingResult,
+            final Model model
     ) {
+        if (bindingResult.hasErrors()) {
+            ValidationHandlerUtil.handleValidation(model, bindingResult);
+            return "redirect:/products";
+        }
         this.productService.update(id, this.productMapper.toEntity(productDto));
         return "redirect:/products/%d".formatted(id);
     }

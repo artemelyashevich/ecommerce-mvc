@@ -23,19 +23,19 @@ import java.util.Properties;
 })
 public class JpaConfig {
 
-    @Value("${datasource.driver_class_name}")
+    @Value("${datasource.driver_class_name:com.mysql.cj.jdbc.Driver}")
     private String driverClassName;
-    @Value("${datasource.url}")
+    @Value("${datasource.url:jdbc:mysql:// localhost:3306/ ecommerce}")
     private String url;
-    @Value("${datasource.username}")
+    @Value("${datasource.username:admin}")
     private String username;
-    @Value("${datasource.password}")
+    @Value("${datasource.password:admin}")
     private String password;
-    @Value("${hibernate.dialect}")
+    @Value("${hibernate.dialect:org.hibernate.dialect.MySQL8Dialect}")
     private String dialect;
-    @Value("${hibernate.show_sql}")
+    @Value("${hibernate.show_sql:true}")
     private String showSql;
-    @Value("${hibernate_hbm2ddl_auto}")
+    @Value("${hibernate_hbm2ddl_auto:true}")
     private String ddlAuto;
 
     @Bean

@@ -52,6 +52,14 @@
                         Sign in
                     </button>
                 </div>
+                <div th:if="${errors}">
+                    <h2>Errors</h2>
+                    <ul>
+                        <div th:each="error: ${errors}">
+                            <li  th:text="${error}"></li>
+                        </div>
+                    </ul>
+                </div>
             </form>
         </div>
     </div>
