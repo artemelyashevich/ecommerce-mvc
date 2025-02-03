@@ -5,6 +5,9 @@ import com.elyashevich.ecommerce.exception.ResourceNotFoundException;
 import com.elyashevich.ecommerce.repository.CategoryRepository;
 import com.elyashevich.ecommerce.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +17,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
+    public static final String CATEGORY_WITH_NAME_WAS_NOT_FOUND_EXCEPTION_TEMPLATE = "Category with name '%s' not found";
+    public static final String CATEGORY_WITH_ID_WAS_NOT_FOUND_EXCEPTION_TEMPLATE = "Category with id '%s' not found";
+
     private final CategoryRepository categoryRepository;
+
+    @Override
+    public Page<Category> findAllPaginated(final int pageNo, final int pageSize, final String sortBy, final String sortDirection) {
+        var sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        var pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        System.out.println(this.categoryRepository.findAll(pageable));
+        return this.categoryRepository.findAll(pageable);
+    }
 
     @Override
     public List<Category> findAll() {
@@ -24,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category findByName(final String name) {
         return this.categoryRepository.findByName(name).orElseThrow(
-                () -> new ResourceNotFoundException("Category with name '%s' not found".formatted(name))
+                () -> new ResourceNotFoundException(CATEGORY_WITH_NAME_WAS_NOT_FOUND_EXCEPTION_TEMPLATE.formatted(name))
         );
     }
 
@@ -36,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category findById(final Long id) {
         return this.categoryRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Category with id '%s' not found".formatted(id))
+                () -> new ResourceNotFoundException(CATEGORY_WITH_ID_WAS_NOT_FOUND_EXCEPTION_TEMPLATE.formatted(id))
         );
     }
 

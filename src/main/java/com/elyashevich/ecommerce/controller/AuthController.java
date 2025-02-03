@@ -35,7 +35,7 @@ public class AuthController {
     @PostMapping("/register")
     public String register(final @Valid @ModelAttribute("user") RegisterDto authDto) {
         this.authService.register(this.registerMapper.toEntity(authDto));
-        return "redirect:/home";
+        return "redirect:/products";
     }
 
     @PostMapping("/login")

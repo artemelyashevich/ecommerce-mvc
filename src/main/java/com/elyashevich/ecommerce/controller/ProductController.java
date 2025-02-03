@@ -1,18 +1,12 @@
 package com.elyashevich.ecommerce.controller;
 
-import com.elyashevich.ecommerce.dto.ProductDto;
-import com.elyashevich.ecommerce.mapper.CategoryMapper;
 import com.elyashevich.ecommerce.mapper.ProductMapper;
-import com.elyashevich.ecommerce.service.CategoryService;
 import com.elyashevich.ecommerce.service.ProductService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -21,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProductController {
 
     private final ProductService productService;
-    private final CategoryService categoryService;
-    private final CategoryMapper categoryMapper;
     private final ProductMapper productMapper;
 
     @GetMapping

@@ -15,18 +15,20 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    public static final String USER_WITH_USERNAME_WAS_NOT_FOUND_EXCEPTION_TEMPLATE = "User with username %s was not found";
+
     private final UserRepository repository;
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         var user = this.repository.findByUsername(username).orElseThrow(
-                ()-> new ResourceNotFoundException("User with username %s was not found".formatted(username))
+                ()-> new ResourceNotFoundException(USER_WITH_USERNAME_WAS_NOT_FOUND_EXCEPTION_TEMPLATE.formatted(username))
         );
         return new User(
                 user.getUsername(),
                 user.getPassword(),
                 user.getRoles().stream()
-                        .map(Role::getAuthority)
+                        .map(Role::name)
                         .map(SimpleGrantedAuthority::new)
                         .toList()
         );

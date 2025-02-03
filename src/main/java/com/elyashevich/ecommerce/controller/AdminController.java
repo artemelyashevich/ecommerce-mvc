@@ -4,8 +4,10 @@ import com.elyashevich.ecommerce.dto.CategoryDto;
 import com.elyashevich.ecommerce.dto.ProductDto;
 import com.elyashevich.ecommerce.mapper.CategoryMapper;
 import com.elyashevich.ecommerce.mapper.ProductMapper;
+import com.elyashevich.ecommerce.mapper.UserMapper;
 import com.elyashevich.ecommerce.service.CategoryService;
 import com.elyashevich.ecommerce.service.ProductService;
+import com.elyashevich.ecommerce.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import static com.elyashevich.ecommerce.util.ConstantUtil.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -23,14 +28,33 @@ public class AdminController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final UserService userService;
+    private final UserMapper userMapper;
     private final ProductMapper productMapper;
     private final CategoryMapper categoryMapper;
 
     @GetMapping("/categories")
-    public String createCategory(final Model model) {
-        var categories = this.categoryService.findAll();
-        model.addAttribute("categories", this.categoryMapper.toDto(categories));
+    public String createCategory(
+            final Model model,
+            final @RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
+            final @RequestParam(value = "sortField", defaultValue = "name") String sortField,
+            final @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir) {
+        var paginated = this.categoryService.findAllPaginated(pageNo, PAGE_SIZE, sortField, sortDir);
+        model.addAttribute("categories", paginated.getContent());
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", paginated.getTotalPages());
+        model.addAttribute("totalItems", paginated.getTotalElements());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals(ORDER_ASC) ? ORDER_DESC : ORDER_ASC);
         return "admin/categories";
+    }
+
+    @GetMapping("/users")
+    public String createUser(final Model model) {
+        var users = this.userService.findAll();
+        model.addAttribute("users", this.userMapper.toDto(users));
+        return "admin/users";
     }
 
     @GetMapping("/products/create")
@@ -41,7 +65,7 @@ public class AdminController {
     }
 
     @GetMapping("/categories/edit/{id}")
-    public String editProduct(final Model model, @PathVariable final Long id) {
+    public String editProduct(final Model model, @PathVariable("id") final Long id) {
         var category = this.categoryService.findById(id);
         model.addAttribute("category", this.categoryMapper.toDto(category));
         return "admin/edit-category";
@@ -67,11 +91,11 @@ public class AdminController {
 
     @PostMapping("/products/create")
     public String createProductAction(final @Valid @ModelAttribute("productDto") ProductDto productDto) {
-        var product  = this.productService.create(productMapper.toEntity(productDto));
+        var product = this.productService.create(productMapper.toEntity(productDto));
         return "redirect:/products/%d".formatted(product.getId());
     }
 
-    @PostMapping("/categories/{id}")
+    @PostMapping("/categories/edit/{id}")
     public String editCategoryAction(
             final @PathVariable("id") Long id,
             final @Valid @ModelAttribute("categoryDto") CategoryDto categoryDto
@@ -99,6 +123,12 @@ public class AdminController {
     @PostMapping("/categories/delete/{id}")
     public String deleteCategory(final @PathVariable("id") Long id) {
         this.categoryService.delete(id);
-        return "redirect:/categories";
+        return "redirect:/admin/categories";
+    }
+
+    @PostMapping("/users/delete/{id}")
+    public String deleteUser(final @PathVariable("id") Long id) {
+        this.userService.delete(id);
+        return "redirect:/admin/users";
     }
 }
