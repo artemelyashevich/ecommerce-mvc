@@ -6,6 +6,8 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import static com.elyashevich.ecommerce.util.ConstantUtil.MAPPING;
+
 public class AppConfig implements WebApplicationInitializer {
 
     @Override
@@ -16,6 +18,6 @@ public class AppConfig implements WebApplicationInitializer {
         var servlet = new DispatcherServlet(context);
         var registration = servletContext.addServlet("app", servlet);
         registration.setLoadOnStartup(1);
-        registration.addMapping("/");
+        registration.addMapping(MAPPING);
     }
 }

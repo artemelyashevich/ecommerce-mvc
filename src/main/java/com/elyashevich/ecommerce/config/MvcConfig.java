@@ -12,6 +12,8 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 
+import static com.elyashevich.ecommerce.util.TemplateResolverUtil.*;
+
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com.elyashevich.ecommerce")
@@ -24,9 +26,9 @@ public class MvcConfig implements WebMvcConfigurer {
     public SpringResourceTemplateResolver templateResolver() {
         var templateResolver = new SpringResourceTemplateResolver();
         templateResolver.setApplicationContext(this.applicationContext);
-        templateResolver.setPrefix("/WEB-INF/templates/");
-        templateResolver.setSuffix(".html");
-        templateResolver.setCacheable(false);
+        templateResolver.setPrefix(PREFIX);
+        templateResolver.setSuffix(SUFFIX);
+        templateResolver.setCacheable(CACHEABLE);
         return templateResolver;
     }
 

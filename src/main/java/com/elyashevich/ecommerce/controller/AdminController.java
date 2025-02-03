@@ -12,7 +12,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import static com.elyashevich.ecommerce.util.ConstantUtil.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -32,15 +39,14 @@ public class AdminController {
             final @RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
             final @RequestParam(value = "sortField", defaultValue = "name") String sortField,
             final @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir) {
-        var pageSize = 10;
-        var paginated = this.categoryService.findAllPaginated(pageNo, pageSize, sortField, sortDir);
+        var paginated = this.categoryService.findAllPaginated(pageNo, PAGE_SIZE, sortField, sortDir);
         model.addAttribute("categories", paginated.getContent());
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", paginated.getTotalPages());
         model.addAttribute("totalItems", paginated.getTotalElements());
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("reverseSortDir", sortDir.equals(ORDER_ASC) ? ORDER_DESC : ORDER_ASC);
         return "admin/categories";
     }
 

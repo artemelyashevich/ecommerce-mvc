@@ -1,6 +1,5 @@
 package com.elyashevich.ecommerce.config;
 
-import com.elyashevich.ecommerce.entity.Role;
 import com.elyashevich.ecommerce.service.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +19,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private static final String ROLE_ADMIN = "ADMIN";
+
     private final UserDetailsServiceImpl userDetailsService;
 
     @Bean
@@ -27,7 +28,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/*").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole(ROLE_ADMIN)
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

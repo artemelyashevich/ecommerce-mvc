@@ -17,6 +17,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
+    public static final String CATEGORY_WITH_NAME_WAS_NOT_FOUND_EXCEPTION_TEMPLATE = "Category with name '%s' not found";
+    public static final String CATEGORY_WITH_ID_WAS_NOT_FOUND_EXCEPTION_TEMPLATE = "Category with id '%s' not found";
+
     private final CategoryRepository categoryRepository;
 
     @Override
@@ -37,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category findByName(final String name) {
         return this.categoryRepository.findByName(name).orElseThrow(
-                () -> new ResourceNotFoundException("Category with name '%s' not found".formatted(name))
+                () -> new ResourceNotFoundException(CATEGORY_WITH_NAME_WAS_NOT_FOUND_EXCEPTION_TEMPLATE.formatted(name))
         );
     }
 
@@ -49,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category findById(final Long id) {
         return this.categoryRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Category with id '%s' not found".formatted(id))
+                () -> new ResourceNotFoundException(CATEGORY_WITH_ID_WAS_NOT_FOUND_EXCEPTION_TEMPLATE.formatted(id))
         );
     }
 

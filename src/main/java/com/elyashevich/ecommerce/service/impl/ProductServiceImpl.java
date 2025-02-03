@@ -15,6 +15,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
+    public static final String PRODUCT_WITH_ID_WAS_NOT_FOUND_EXCEPTION_TEMPLATE = "Product with id '%s' not found";
+
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
 
@@ -26,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product findById(final Long id) {
         return this.productRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Product with id '%s' not found".formatted(id))
+                () -> new ResourceNotFoundException(PRODUCT_WITH_ID_WAS_NOT_FOUND_EXCEPTION_TEMPLATE.formatted(id))
         );
     }
 

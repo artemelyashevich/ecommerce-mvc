@@ -16,6 +16,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    public static final String USER_WITH_EMAIL_WAS_NOT_FOUND_EXCEPTION_TEMPLATE = "User with email %s was not found";
+    public static final String USER_WITH_USERNAME_WAS_NOT_FOUND_EXCEPTION_TEMPLATE = "User with username %s was not found";
+    public static final String USER_WITH_ID_WAS_NOT_FOUND_TEMPLATE_EXCEPTION = "User with id %s was not found";
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -27,14 +31,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByEmail(final String email) {
         return this.userRepository.findByEmail(email).orElseThrow(
-                () -> new ResourceNotFoundException("User with email %s was not found".formatted(email))
+                () -> new ResourceNotFoundException(USER_WITH_EMAIL_WAS_NOT_FOUND_EXCEPTION_TEMPLATE.formatted(email))
         );
     }
 
     @Override
     public User findByUsername(final String username) {
         return this.userRepository.findByUsername(username).orElseThrow(
-                () -> new ResourceNotFoundException("User with username %s was not found".formatted(username))
+                () -> new ResourceNotFoundException(USER_WITH_USERNAME_WAS_NOT_FOUND_EXCEPTION_TEMPLATE.formatted(username))
         );
     }
 
@@ -50,7 +54,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(final Long id) {
         var candidate = this.userRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("User with id %s was not found".formatted(id))
+                () -> new ResourceNotFoundException(USER_WITH_ID_WAS_NOT_FOUND_TEMPLATE_EXCEPTION.formatted(id))
         );
         this.userRepository.delete(candidate);
     }
