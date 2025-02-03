@@ -89,7 +89,17 @@ public class UserServiceImpl implements UserService {
     public void delete(final Long id) {
         log.info("Delete user {}", id);
 
-        var candidate = this.userRepository.findById(id).orElseThrow(
+        var candidate = this.findById(id);
+
+        log.info("Deleted user {}", candidate);
+        this.userRepository.delete(candidate);
+    }
+
+    @Override
+    public User findById(Long id) {
+        log.info("Find user by id {}", id);
+
+        var user = this.userRepository.findById(id).orElseThrow(
                 () -> {
                     var message = String.format(USER_WITH_ID_WAS_NOT_FOUND_TEMPLATE_EXCEPTION, id);
 
@@ -99,7 +109,7 @@ public class UserServiceImpl implements UserService {
                 }
         );
 
-        log.info("Deleted user {}", candidate);
-        this.userRepository.delete(candidate);
+        log.info("Found user {}", user);
+        return user;
     }
 }

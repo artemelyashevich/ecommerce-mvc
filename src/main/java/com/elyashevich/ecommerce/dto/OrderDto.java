@@ -1,4 +1,6 @@
 package com.elyashevich.ecommerce.dto;
 
-public record OrderDto() {
+public record OrderDto(
+
+) {
 }

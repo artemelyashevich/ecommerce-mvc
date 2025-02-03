@@ -36,7 +36,7 @@ public class Product extends AbstractEntity {
     @Column(name = "price", nullable = false)
     private double price;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
     private Category category;
 
@@ -47,7 +47,7 @@ public class Product extends AbstractEntity {
     @OneToMany(
             mappedBy = "product",
             cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             orphanRemoval = true
     )
     private List<Cart> carts = new ArrayList<>();

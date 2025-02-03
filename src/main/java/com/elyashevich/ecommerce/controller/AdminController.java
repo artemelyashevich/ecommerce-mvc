@@ -2,8 +2,9 @@ package com.elyashevich.ecommerce.controller;
 
 import com.elyashevich.ecommerce.dto.CategoryDto;
 import com.elyashevich.ecommerce.dto.ProductDto;
+import com.elyashevich.ecommerce.entity.Category;
+import com.elyashevich.ecommerce.entity.Product;
 import com.elyashevich.ecommerce.mapper.CategoryMapper;
-import com.elyashevich.ecommerce.mapper.ProductMapper;
 import com.elyashevich.ecommerce.mapper.UserMapper;
 import com.elyashevich.ecommerce.service.CategoryService;
 import com.elyashevich.ecommerce.service.ProductService;
@@ -32,7 +33,6 @@ public class AdminController {
     private final CategoryService categoryService;
     private final UserService userService;
     private final UserMapper userMapper;
-    private final ProductMapper productMapper;
     private final CategoryMapper categoryMapper;
 
     @GetMapping("/categories")
@@ -80,7 +80,7 @@ public class AdminController {
                 .filter(category -> !product.getCategory().getId().equals(category.getId()))
                 .toList();
         model.addAttribute("categories", this.categoryMapper.toDto(categories));
-        model.addAttribute("product", this.productMapper.toDto(product));
+        model.addAttribute("product", product);
         return "admin/edit-product";
     }
 
@@ -109,7 +109,14 @@ public class AdminController {
             ValidationHandlerUtil.handleValidation(model, bindingResult);
             return "redirect:/products";
         }
-        var product = this.productService.create(productMapper.toEntity(productDto));
+        var product = this.productService.create(Product.builder()
+                        .name(productDto.name())
+                        .price(productDto.price())
+                        .description(productDto.description())
+                        .category(Category.builder()
+                                .name(productDto.categoryName())
+                                .build())
+                .build());
         return "redirect:/products/%d".formatted(product.getId());
     }
 
@@ -140,7 +147,14 @@ public class AdminController {
             ValidationHandlerUtil.handleValidation(model, bindingResult);
             return "redirect:/products";
         }
-        this.productService.update(id, this.productMapper.toEntity(productDto));
+        this.productService.update(id, Product.builder()
+                .name(productDto.name())
+                .price(productDto.price())
+                .description(productDto.description())
+                .category(Category.builder()
+                        .name(productDto.categoryName())
+                        .build())
+                .build());
         return "redirect:/products/%d".formatted(id);
     }
 

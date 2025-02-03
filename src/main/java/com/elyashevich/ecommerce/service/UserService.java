@@ -46,4 +46,6 @@ public interface UserService {
      * @param id the ID of the user to delete
      */
     void delete(final Long id);
+
+    User findById(final Long id);
 }
