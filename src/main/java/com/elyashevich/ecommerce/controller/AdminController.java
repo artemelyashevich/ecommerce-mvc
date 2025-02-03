@@ -4,17 +4,15 @@ import com.elyashevich.ecommerce.dto.CategoryDto;
 import com.elyashevich.ecommerce.dto.ProductDto;
 import com.elyashevich.ecommerce.mapper.CategoryMapper;
 import com.elyashevich.ecommerce.mapper.ProductMapper;
+import com.elyashevich.ecommerce.mapper.UserMapper;
 import com.elyashevich.ecommerce.service.CategoryService;
 import com.elyashevich.ecommerce.service.ProductService;
+import com.elyashevich.ecommerce.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -23,14 +21,34 @@ public class AdminController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final UserService userService;
+    private final UserMapper userMapper;
     private final ProductMapper productMapper;
     private final CategoryMapper categoryMapper;
 
     @GetMapping("/categories")
-    public String createCategory(final Model model) {
-        var categories = this.categoryService.findAll();
-        model.addAttribute("categories", this.categoryMapper.toDto(categories));
+    public String createCategory(
+            final Model model,
+            final @RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
+            final @RequestParam(value = "sortField", defaultValue = "name") String sortField,
+            final @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir) {
+        var pageSize = 10;
+        var paginated = this.categoryService.findAllPaginated(pageNo, pageSize, sortField, sortDir);
+        model.addAttribute("categories", paginated.getContent());
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", paginated.getTotalPages());
+        model.addAttribute("totalItems", paginated.getTotalElements());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         return "admin/categories";
+    }
+
+    @GetMapping("/users")
+    public String createUser(final Model model) {
+        var users = this.userService.findAll();
+        model.addAttribute("users", this.userMapper.toDto(users));
+        return "admin/users";
     }
 
     @GetMapping("/products/create")
@@ -67,7 +85,7 @@ public class AdminController {
 
     @PostMapping("/products/create")
     public String createProductAction(final @Valid @ModelAttribute("productDto") ProductDto productDto) {
-        var product  = this.productService.create(productMapper.toEntity(productDto));
+        var product = this.productService.create(productMapper.toEntity(productDto));
         return "redirect:/products/%d".formatted(product.getId());
     }
 
@@ -100,5 +118,11 @@ public class AdminController {
     public String deleteCategory(final @PathVariable("id") Long id) {
         this.categoryService.delete(id);
         return "redirect:/admin/categories";
+    }
+
+    @PostMapping("/users/delete/{id}")
+    public String deleteUser(final @PathVariable("id") Long id) {
+        this.userService.delete(id);
+        return "redirect:/admin/users";
     }
 }

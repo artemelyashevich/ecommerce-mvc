@@ -5,6 +5,9 @@ import com.elyashevich.ecommerce.exception.ResourceNotFoundException;
 import com.elyashevich.ecommerce.repository.CategoryRepository;
 import com.elyashevich.ecommerce.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +18,16 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+
+    @Override
+    public Page<Category> findAllPaginated(final int pageNo, final int pageSize, final String sortBy, final String sortDirection) {
+        var sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        var pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        System.out.println(this.categoryRepository.findAll(pageable));
+        return this.categoryRepository.findAll(pageable);
+    }
 
     @Override
     public List<Category> findAll() {
