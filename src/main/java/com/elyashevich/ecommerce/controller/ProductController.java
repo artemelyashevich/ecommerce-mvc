@@ -1,6 +1,5 @@
 package com.elyashevich.ecommerce.controller;
 
-import com.elyashevich.ecommerce.mapper.ProductMapper;
 import com.elyashevich.ecommerce.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,19 +14,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProductController {
 
     private final ProductService productService;
-    private final ProductMapper productMapper;
 
     @GetMapping
     public String products(final Model model) {
         var products = this.productService.findAll();
-        model.addAttribute("products", this.productMapper.toDto(products));
+        model.addAttribute("products", products);
         return "product/products";
     }
 
     @GetMapping("/{id}")
     public String product(final @PathVariable Long id, final Model model) {
         var product = this.productService.findById(id);
-        model.addAttribute("product", this.productMapper.toDto(product));
+        model.addAttribute("product", product);
         return "product/product";
     }
 }

@@ -3,6 +3,7 @@ package com.elyashevich.ecommerce.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.hibernate.validator.constraints.Length;
+import org.mapstruct.Mapping;
 
 public record ProductDto(
 
@@ -25,6 +26,7 @@ public record ProductDto(
         @Positive(message = "Price must be positive")
         double price,
 
-        CategoryDto category
+        @NotNull
+        String categoryName
 ) {
 }
