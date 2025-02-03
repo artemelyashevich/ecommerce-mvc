@@ -6,12 +6,14 @@ import com.elyashevich.ecommerce.exception.ResourceNotFoundException;
 import com.elyashevich.ecommerce.repository.UserRepository;
 import com.elyashevich.ecommerce.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -25,37 +27,79 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
-        return this.userRepository.findAll();
+        log.info("Find all users");
+
+        var users = this.userRepository.findAll();
+
+        log.info("Found {} users", users.size());
+        return users;
     }
 
     @Override
     public User findByEmail(final String email) {
-        return this.userRepository.findByEmail(email).orElseThrow(
-                () -> new ResourceNotFoundException(USER_WITH_EMAIL_WAS_NOT_FOUND_EXCEPTION_TEMPLATE.formatted(email))
+        log.info("Find user by email {}", email);
+
+        var user = this.userRepository.findByEmail(email).orElseThrow(
+                () -> {
+                    var message = String.format(USER_WITH_EMAIL_WAS_NOT_FOUND_EXCEPTION_TEMPLATE, email);
+
+                    log.warn(message);
+
+                    return new ResourceNotFoundException(message);
+                }
         );
+
+        log.info("Found user {}", user);
+        return user;
     }
 
     @Override
     public User findByUsername(final String username) {
-        return this.userRepository.findByUsername(username).orElseThrow(
-                () -> new ResourceNotFoundException(USER_WITH_USERNAME_WAS_NOT_FOUND_EXCEPTION_TEMPLATE.formatted(username))
+        log.info("Find user by email {}", username);
+
+        var user = this.userRepository.findByUsername(username).orElseThrow(
+                () -> {
+                    var message = String.format(USER_WITH_USERNAME_WAS_NOT_FOUND_EXCEPTION_TEMPLATE, username);
+
+                    log.warn(message);
+
+                    return new ResourceNotFoundException(message);
+                }
         );
+
+        log.info("Found user {}", user);
+        return user;
     }
 
     @Override
     public User create(final User user) {
+        log.info("Create user {}", user);
+
         user.addRole(Role.ROLE_USER);
         user.addRole(Role.ROLE_ADMIN);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return this.userRepository.save(user);
+        var newUser = this.userRepository.save(user);
+
+        log.info("Created new user {}", newUser);
+        return newUser;
     }
 
     @Transactional
     @Override
     public void delete(final Long id) {
+        log.info("Delete user {}", id);
+
         var candidate = this.userRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException(USER_WITH_ID_WAS_NOT_FOUND_TEMPLATE_EXCEPTION.formatted(id))
+                () -> {
+                    var message = String.format(USER_WITH_ID_WAS_NOT_FOUND_TEMPLATE_EXCEPTION, id);
+
+                    log.warn(message);
+
+                    return new ResourceNotFoundException(message);
+                }
         );
+
+        log.info("Deleted user {}", candidate);
         this.userRepository.delete(candidate);
     }
 }
