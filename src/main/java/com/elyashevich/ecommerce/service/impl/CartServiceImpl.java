@@ -77,4 +77,14 @@ public class CartServiceImpl implements CartService {
 
         log.info("Cart removed");
     }
+
+    @Override
+    public void removeAll(final Long userId) {
+        this.cartRepository.deleteAllByUserId(userId);
+    }
+
+    @Override
+    public List<Cart> findAllByUserId(final Long id) {
+        return this.cartRepository.findAllByUserId(id);
+    }
 }

@@ -14,4 +14,8 @@ public interface CartService {
     void addCart(final CartDto cart);
 
     void remove(final Long id);
+
+    void removeAll(final Long userId);
+
+    List<Cart> findAllByUserId(final Long id);
 }

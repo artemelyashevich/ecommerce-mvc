@@ -109,14 +109,7 @@ public class AdminController {
             ValidationHandlerUtil.handleValidation(model, bindingResult);
             return "redirect:/products";
         }
-        var product = this.productService.create(Product.builder()
-                        .name(productDto.name())
-                        .price(productDto.price())
-                        .description(productDto.description())
-                        .category(Category.builder()
-                                .name(productDto.categoryName())
-                                .build())
-                .build());
+        var product = this.productService.create(convertToProduct(productDto));
         return "redirect:/products/%d".formatted(product.getId());
     }
 
@@ -147,14 +140,7 @@ public class AdminController {
             ValidationHandlerUtil.handleValidation(model, bindingResult);
             return "redirect:/products";
         }
-        this.productService.update(id, Product.builder()
-                .name(productDto.name())
-                .price(productDto.price())
-                .description(productDto.description())
-                .category(Category.builder()
-                        .name(productDto.categoryName())
-                        .build())
-                .build());
+        this.productService.update(id, convertToProduct(productDto));
         return "redirect:/products/%d".formatted(id);
     }
 
@@ -174,5 +160,16 @@ public class AdminController {
     public String deleteUser(final @PathVariable("id") Long id) {
         this.userService.delete(id);
         return "redirect:/admin/users";
+    }
+
+    private static Product convertToProduct(ProductDto productDto) {
+        return Product.builder()
+                .name(productDto.name())
+                .price(productDto.price())
+                .description(productDto.description())
+                .category(Category.builder()
+                        .name(productDto.categoryName())
+                        .build())
+                .build();
     }
 }
